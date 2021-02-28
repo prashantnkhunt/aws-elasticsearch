@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.prominentpixel'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+mainClassName = "com.prominentpixel.aws.es"
+
+jar {
+    manifest {
+        attributes "Main-Class": "$mainClassName"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+//    implementation platform('com.amazonaws:aws-java-sdk-bom:1.19.4')
+    implementation 'com.github.awslabs:aws-request-signing-apache-interceptor:b3772780da'
+    // https://mvnrepository.com/artifact/software.amazon.awssdk/bom
+//    compile group: 'software.amazon.awssdk', name: 'bom', version: '2.15.75', ext: 'pom'
+
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-elasticsearch', version: '1.11.951'
+    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-high-level-client', version: '7.6.1'
+
+
+}
