@@ -1,2 +1,2 @@
-aws es describe-elasticsearch-domain --domain-name presser-test-v2 --profile ruediger
+aws es describe-elasticsearch-domain --domain-name presser-test-v2 --profile prashant
 

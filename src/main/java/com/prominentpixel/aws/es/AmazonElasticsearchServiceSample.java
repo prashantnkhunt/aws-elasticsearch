@@ -16,8 +16,9 @@ import java.io.IOException;
 public class AmazonElasticsearchServiceSample {
     private static String serviceName = "es";
     private static String region = "eu-central-1";
-//    private static String aesEndpoint = "search-presser-spark-test-5mk6tfxyztwfzixsm6o5r66xbi.eu-central-1.es.amazonaws.com";
-    private static String aesEndpoint = "vpc-aws-spark-es-test-pm6xkkjluhxyoe6mlf5t7mji6i.ap-south-1.es.amazonaws.com";
+//    private static String region = "ap-south-1";
+    private static String aesEndpoint = "search-presser-spark-test-5mk6tfxyztwfzixsm6o5r66xbi.eu-central-1.es.amazonaws.com";
+//    private static String aesEndpoint = "vpc-aws-spark-es-test-pm6xkkjluhxyoe6mlf5t7mji6i.ap-south-1.es.amazonaws.com";
     private static String index = "my-index";
     private static String type = "_doc";
     private static String id = "1";
@@ -55,6 +56,16 @@ public class AmazonElasticsearchServiceSample {
     }
 
     // Adds the interceptor to the ES REST client
+    public static RestHighLevelClient esClientHTTP(String serviceName, String region) {
+        AWS4Signer signer = new AWS4Signer();
+        signer.setServiceName(serviceName);
+        signer.setRegionName(region);
+        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
+        return new RestHighLevelClient(RestClient.builder(
+                new HttpHost(aesEndpoint,443,"https"))
+                .setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)));
+    }
+
     public static RestHighLevelClient esClient(String serviceName, String region) {
         AWS4Signer signer = new AWS4Signer();
         signer.setServiceName(serviceName);
